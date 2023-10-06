@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <title>Loans</title>
+
+    <style>
+
+
+        .navbar{
+
+    height: 10vh;
+    width: 100%;
+    position: fixed;
+    top: 0vh;
+    z-index: 10;
+    background-color: rgb(9, 97, 12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2vw;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.navbar h3{
+    color: aliceblue;
+}
+
+.nav-options{
+    display: flex;
+    gap: 20px;
+}
+
+.nav-options a{
+    color: rgb(209, 210, 211);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-options a:hover{
+    color: aliceblue;
+}
+.loans-page{
+
+    padding: 12vh 3vw 3vh 3vw;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+
+}
+
+.loans-container1{
+
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.loans{
+    width: 100%;
+    height: 100%;
+    margin-right: 20%;
+    padding: 3vh 2vw;
+}
+.loans h3{
+
+    text-align: center;
+    color: rgb(50, 88, 116);
+    margin-bottom: 5vh;
+}
+
+.loans-body{
+
+    /* background-color: aqua; */
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.loans-body::-webkit-scrollbar {
+    display: none;
+}
+.loans-body .loan{
+
+    background-color: rgba(233, 236, 239, 0.676);
+    padding: 2vh 2vw;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.loans-body .loan span{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.loans-body span p{
+
+    font-size: 0.9rem;
+    margin: 0;
+    color: rgb(34, 182, 152);
+    display:flex;
+    gap:5px;
+}
+.loans-body span p b{
+
+    font-weight: 500;
+    color: rgb(56, 110, 133);
+}
+.paymentInputDiv{
+    width: 70%;
+    margin-left: 1rem;
+}
+
+.loans-container2{
+    width: 50%;
+    height: 100%;
+}
+
+.new-loans-container{
+    width: 80%;
+    height: fit-content;
+    margin-top: 5%;
+    margin-left: 10%;
+    background-color: rgba(211, 239, 229, 0.527);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 1.3rem;
+    padding: 3vh 2vw;
+
+}
+
+.new-loans-container form{
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.new-loans-container h3{
+    text-align: center;
+    color: rgb(41, 95, 118);
+}
+.new-loans-container label{
+    color: rgb(47, 77, 90);
+}
+.new-loans-container p{
+    text-align: justify;
+    color: rgba(73, 99, 112, 0.763);
+    font-size: 0.9rem;
+    margin: 0;
+}
+.new-loans-container button{
+    width: 40%;
+    margin-left: 30%;
+}
+
+.input-row{
+    display: flex;
+    width: 100%;
+    gap: 15px;
+}
+
+.input-row .input-row11{
+    width: 80%;
+}
+.input-row .input-row21{
+    width: 40%;
+}
+.input-row .input-row22{
+    width: 60%;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h3>SB Bank</h3>
+    <div class="nav-options">
+        <a id="navUser" href="/user">Home</a>
+        <a id="navDeposit" href="/user-deposits">Deposits</a>
+        <a id="navLoan" href="/user-loan">Loans</a>
+        <a id="navTransaction" href="/user-transactions">Transactions</a>
+        <a href="#" id="logoutBtn" >Logout</a>
+    </div>
+</div>
+
+<script>
+    const uData = JSON.parse(localStorage.getItem('userData'));
+
+    if (uData) {
+
+        const userLink = document.getElementById('navUser');
+        userLink.href = `/user/${uData._id}`;
+
+        const depositLink = document.getElementById('navDeposit');
+        depositLink.href = `/user-deposits/${uData._id}`;
+
+        const loansLink = document.getElementById('navLoan');
+        loansLink.href = `/user-loan/${uData._id}`;
+
+        const transactionsLink = document.getElementById('navTransaction');
+        transactionsLink.href = `/user-transactions/${uData._id}`;
+
+    }
+</script>
+
+<script>
+
+    const myLink = document.getElementById('logoutBtn');
+
+    myLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+         localStorage.clear();
+        for (let key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            localStorage.removeItem(key);
+          }
+        }
+
+        window.location.href = '/';
+
+
+    });
+
+</script>
+
+
+
+
+
+<div class="loans-page">
+
+    <div class="loans-container1">
+
+        <div class="loans">
+
+            <h3>loans</h3>
+            <div class="loans-body">
+
+                <div th:each="loan: ${loansList}" >
+                    <div class="loan" >
+                        <span>
+                            <p><b>loan type: </b><span th:text="${loan.loanType}" ></span></p>
+                            <p><b>Nominee name: </b> <span th:text="${loan.nomineeName}" ></span></p>
+                            <p><b>Loan amount: </b> <span th:text="${loan.loanAmount}" ></span></p>
+                        </span>
+                        <span>
+                            <p><b>Balance: </b> <span th:text="${loan.balance}" ></span></p>
+                            <p><b>Duration: </b> <span th:text="${loan.duration}" ></span> months</p>
+                            <p ><b>Loan status: </b><span th:text="${loan.loanStatus}" ></span></p>
+                        </span>
+
+                        <div>
+                            <form class="input-group mb-3 paymentInputDiv" th:if="${loan.loanStatus == 'approved'}" action="/loan-repayment" method="post" >
+                                <input type="hidden" th:value="${loan._id}" name="customerId" >
+                                <input type="number" class="form-control"   placeholder="re-pay loan amount" aria-label="Recipient's username" aria-describedby="button-addon2" name="balance" >
+                                <button class="btn btn-primary repayLoanBtn" id="button-addon2" type="submit" >make payment</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="loans-container2">
+
+        <div class="new-loans-container">
+
+            <form action="/apply-loan" method="post">
+
+                <h3>Apply for New Loan</h3>
+
+                <input type="hidden" class="form-control" id="transactionUserID" placeholder="Enter account id"  name="customerId" >
+                <input type="hidden" class="form-control" id="transactionUserName" placeholder="Enter account name"  name="customerName" >
+
+
+                <select class="form-select" aria-label="Default select example" name="loanType" >
+                    <option selected value="">Choose loan type</option>
+                    <option value="home-loan">Home Loan</option>
+                    <option value="vehicle-loan">Vehicle Loan</option>
+                    <option value="personal-loan">Personal Loan</option>
+                </select>
+
+                <div class="input-row">
+
+                    <div class="form-floating input-row11">
+                        <input type="text" class="form-control" id="nomineeNameInput" placeholder="text" name="nomineeName" >
+                        <label for="nomineeNameInput">Nominee name</label>
+                    </div>
+                    <div class="form-floating input-row12">
+                        <input type="number" class="form-control" id="nomineeAgeInput" placeholder="text" name="nomineeAge" >
+                        <label for="nomineeAgeInput">Age</label>
+                    </div>
+
+                </div>
+
+                <div class="input-row">
+
+                    <div class="form-floating input-row21">
+                        <input type="number" class="form-control" id="loanAmountInput" placeholder="text" name="loanAmount" >
+                        <label for="loanAmountInput">loan amount</label>
+                    </div>
+                    <div class="form-floating input-row22">
+                        <input type="number" class="form-control" id="loanDurationInput" placeholder="text" name="duration" >
+                        <label for="loanDurationInput">Duration (in months)</label>
+                    </div>
+
+                </div>
+
+                <p> * I here by agree to all the terms & conditions to make this loan. I agree to pay interest with the dynamic interests depending up on the market conditions. I agree to repay the loan before the deadline.</p>
+
+                <button id="applyLoanForm" class="btn btn-primary" type="submit" >Apply</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+<!--    Repay loan-->
+
+    const repayButtons = document.querySelectorAll('.repayLoanBtn');
+
+    approveButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+
+
+            const formData = new FormData(this.closest('form'));
+            alert("loan repayed!!");
+            fetch('/approve-loan', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Transaction failed');
+                }
+            })
+            .then(data => {
+                // Handle the response data as needed
+            });
+        });
+    });
+
+
+
+<!--    Apply for loan-->
+
+    document.getElementById('applyLoanForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/apply-loan', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+
+                var data = response.json();
+
+                return data;
+            } else {
+                console.error('transaction failed');
+            }
+        })
+        .then(loanData => {
+
+            if (loanData) {
+                alert("Loan application successful");
+                window.location.href = '/user';
+            } else {
+                console.error('Error: Loan data not available');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+
+
+<script>
+
+    var data = localStorage.getItem('userData');
+    var userData = JSON.parse(data);
+
+    const Username = document.getElementById('transactionUserName');
+    const UserID = document.getElementById('transactionUserID');
+
+    Username.value = userData.username;
+    UserID.value = userData._id;
+
+</script>
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

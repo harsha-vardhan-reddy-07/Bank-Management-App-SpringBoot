@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Deposits</title>
+
+    <style>
+        .navbar{
+
+height: 10vh;
+width: 100%;
+position: fixed;
+top: 0vh;
+z-index: 10;
+background-color: rgb(9, 97, 12);
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 2vw;
+box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.navbar h3{
+color: aliceblue;
+}
+
+.nav-options{
+display: flex;
+gap: 20px;
+}
+
+.nav-options a{
+color: rgb(209, 210, 211);
+text-decoration: none;
+cursor: pointer;
+}
+
+.nav-options a:hover{
+color: aliceblue;
+}
+
+        .deposits-page{
+
+    padding: 12vh 3vw 3vh 3vw;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+
+}
+
+.deposits-container1{
+
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.deposits{
+    width: 100%;
+    height: 100%;
+    margin-right: 20%;
+    padding: 3vh 2vw;
+
+}
+.deposits h3{
+
+    text-align: center;
+    color: rgb(50, 88, 116);
+    margin-bottom: 5vh;
+}
+
+.deposits-body{
+
+    /* background-color: aqua; */
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.deposits-body::-webkit-scrollbar {
+    display: none;
+}
+.deposits-body .deposit{
+
+    background-color: rgba(233, 236, 239, 0.676);
+    padding: 2vh 2vw;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.deposits-body .deposit span{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.deposits-body span p{
+
+    font-size: 0.9rem;
+    margin: 0;
+    color: rgb(34, 182, 152);
+    display: flex;
+    gap: 5px;
+}
+.deposits-body span p b{
+
+    font-weight: 500;
+    color: rgb(56, 110, 133);
+}
+
+
+.deposits-container2{
+    width: 50%;
+}
+
+.new-deposits-container{
+    width: 80%;
+    height: fit-content;
+    margin-top: 5%;
+    margin-left: 10%;
+    background-color: rgba(211, 239, 229, 0.527);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 1.3rem;
+    padding: 3vh 2vw;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.new-deposits-container h3{
+    text-align: center;
+    color: rgb(41, 95, 118);
+}
+.new-deposits-container label{
+    color: rgb(47, 77, 90);
+}
+.new-deposits-container p{
+    text-align: justify;
+    color: rgba(73, 99, 112, 0.763);
+    font-size: 0.9rem;
+    margin: 0;
+}
+.new-deposits-container button{
+    width: 40%;
+    margin-left: 30%;
+}
+
+.input-row{
+    display: flex;
+    width: 100%;
+    gap: 15px;
+}
+
+.input-row .input-row11{
+    width: 80%;
+}
+.input-row .input-row21{
+    width: 40%;
+}
+.input-row .input-row22{
+    width: 60%;
+}
+
+    </style>
+
+</head>
+<body>
+
+
+<div class="navbar">
+    <h3>SB Bank</h3>
+    <div class="nav-options">
+        <a id="navUser" href="/user">Home</a>
+        <a id="navDeposit" href="/user-deposits">Deposits</a>
+        <a id="navLoan" href="/user-loan">Loans</a>
+        <a id="navTransaction" href="/user-transactions">Transactions</a>
+        <a href="#" id="logoutBtn" >Logout</a>
+    </div>
+</div>
+
+<script>
+    const uData = JSON.parse(localStorage.getItem('userData'));
+
+    if (uData) {
+
+        const userLink = document.getElementById('navUser');
+        userLink.href = `/user/${uData._id}`;
+
+        const depositLink = document.getElementById('navDeposit');
+        depositLink.href = `/user-deposits/${uData._id}`;
+
+        const loansLink = document.getElementById('navLoan');
+        loansLink.href = `/user-loan/${uData._id}`;
+
+        const transactionsLink = document.getElementById('navTransaction');
+        transactionsLink.href = `/user-transactions/${uData._id}`;
+
+    }
+</script>
+
+<script>
+
+    const myLink = document.getElementById('logoutBtn');
+
+    myLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+         localStorage.clear();
+        for (let key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            localStorage.removeItem(key);
+          }
+        }
+
+        window.location.href = '/';
+
+
+    });
+
+</script>
+
+<div class="deposits-page">
+
+    <div class="deposits-container1">
+
+        <div class="deposits">
+
+            <h3>Deposits</h3>
+            <div class="deposits-body">
+
+                <div class="deposit" th:each="deposit: ${depositsList}" >
+
+                    <span>
+                        <p><b>Deposit name: </b> <span th:text="${deposit.depositName}" ></span></p>
+                        <p><b>Nominee name: </b>  <span th:text="${deposit.nomineeName}" ></span></p>
+                        <p><b>Nominee age: </b>  <span th:text="${deposit.nomineeAge}" ></span></p>
+                    </span>
+                    <span>
+                        <p><b>Amount: </b>  <span th:text="${deposit.amount}" ></span></p>
+                        <p><b>Duration: </b>  <span th:text="${deposit.duration}" ></span> months</p>
+                        <p><b>Mature Date: </b> 32/342/234 </p>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="depositCont">
+                <script th:if="${depositsList}">
+                    console.log("hiioo");
+                    console.log(/*[[${depositsList}]]*/);
+                </script>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="deposits-container2">
+
+        <form class="new-deposits-container" action="/new-deposit" method="post">
+
+            <h3>New Deposit</h3>
+
+            <input type="hidden" class="form-control" id="transactionUserID" placeholder="Enter account id"  name="customerId" >
+            <input type="hidden" class="form-control" id="transactionUserName" placeholder="Enter account name"  name="customerName" >
+
+            <div class="form-floating">
+                <input type="text" class="form-control" id="depositNameInput" placeholder="Deposit name" name="depositName" >
+                <label for="depositNameInput">Deposit name</label>
+            </div>
+
+            <div class="input-row">
+
+                <div class="form-floating input-row11">
+                    <input type="text" class="form-control" id="nomineeNameInput" placeholder="text" name="nomineeName" >
+                    <label for="nomineeNameInput">Nominee name</label>
+                </div>
+                <div class="form-floating input-row12">
+                    <input type="number" class="form-control" id="nomineeAgeInput" placeholder="text" name="nomineeAge" >
+                    <label for="nomineeAgeInput">Age</label>
+                </div>
+
+            </div>
+
+            <div class="input-row">
+
+                <div class="form-floating input-row21">
+                    <input type="number" class="form-control" id="depositAmountInput" placeholder="Amount" name="amount" >
+                    <label for="depositAmountInput">Deposit amount</label>
+                </div>
+                <div class="form-floating input-row22">
+                    <input type="number" class="form-control" id="depositDurationInput" placeholder="duration" name="duration" >
+                    <label for="depositDurationInput">Duration (in months)</label>
+                </div>
+
+            </div>
+
+            <p> * I here by agree to all the terms & conditions to make this deposit. I agree to gain interest with the dynamic interests depending up on the market conditions. I agree that at any case I cannot break deposit before mature date.</p>
+
+            <button class="btn btn-primary" id="depositSubmitForm" type="submit" >Deposit</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+    document.getElementById('depositSubmitForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/new-deposit', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+
+                var data = response.json();
+
+                return data;
+            } else {
+                console.error('transaction failed');
+            }
+        })
+        .then(depositData => {
+
+            var localStorageData = JSON.parse(localStorage.getItem('userData'));
+
+            const depositData = JSON.parse(JSON.stringify(depositData));
+
+            localStorageData.balance = localStorageData.balance - depositData.amount;
+
+            localStorage.setItem('userData', JSON.stringify(localStorageData))
+
+            alert("deposit successful");
+
+            window.location.href = '/user';
+
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+
+
+
+<script>
+
+    var data = localStorage.getItem('userData');
+    var userData = JSON.parse(data);
+
+    const Username = document.getElementById('transactionUserName');
+    const UserID = document.getElementById('transactionUserID');
+
+    Username.value = userData.username;
+    UserID.value = userData._id;
+
+</script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

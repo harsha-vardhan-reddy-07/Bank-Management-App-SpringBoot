@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Admin</title>
+
+    <style>
+
+        .navbar{
+
+    height: 10vh;
+    width: 100%;
+    position: fixed;
+    top: 0vh;
+    z-index: 10;
+    background-color: rgb(9, 97, 12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2vw;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.navbar h3{
+    color: aliceblue;
+}
+
+.nav-options{
+    display: flex;
+    gap: 20px;
+}
+
+.nav-options a{
+    color: rgb(209, 210, 211);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-options a:hover{
+    color: aliceblue;
+}
+
+        .admin-page{
+
+    height: 100vh;
+    padding-top: 13vh;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: 30vh 30vh;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    row-gap: 30px !important;
+}
+
+.admin-card{
+
+    padding: 3vh 2vw;
+    text-align: center;
+    width: 20vw;
+    height: 150px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.admin-card:hover{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.admin-card h4{
+    margin: 0;
+
+}
+
+.admin-card p{
+
+    margin: 0;
+}
+
+.admin-card button{
+
+
+}
+    </style>
+
+
+
+</head>
+<body>
+
+<div class="navbar">
+    <h3 >SB Bank (Admin)</h3>
+    <div class="nav-options" >
+
+        <a href="/admin">Home</a>
+        <a href="/all-users">Users</a>
+        <a href="/all-deposits">Deposits</a>
+        <a href="/all-loans">Loans</a>
+        <a href="/all-transactions">Transactions</a>
+        <a href="#" id="logoutBtn" >Logout</a>
+    </div>
+</div>
+
+<script>
+
+    const myLink = document.getElementById('logoutBtn');
+
+    myLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+         localStorage.clear();
+        for (let key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            localStorage.removeItem(key);
+          }
+        }
+        window.location.href = '/';
+
+    });
+</script>
+
+
+<div class="admin-page">
+
+    <div class="card admin-card users-card">
+        <h4>Users</h4>
+        <p th:text="${#lists.size(usersList)}" ></p>
+        <a class="btn btn-primary" href="/all-users">View all</a>
+    </div>
+
+    <div class="card admin-card transactions-card">
+        <h4>Transactions</h4>
+        <p th:text="${#lists.size(transactionsList)}" ></p>
+        <a class="btn btn-primary" href="/all-transactions">View all</a>
+    </div>
+
+    <div class="card admin-card deposits-card">
+        <h4>Deposits</h4>
+        <p th:text="${#lists.size(depositsList)}" ></p>
+        <a class="btn btn-primary" href="/all-deposits">View all</a>
+    </div>
+
+    <div class="card admin-card loans-card">
+        <h4>Loans</h4>
+        <p th:text="${#lists.size(loansList)}" ></p>
+        <a class="btn btn-primary" href="/all-loans">View all</a>
+    </div>
+
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

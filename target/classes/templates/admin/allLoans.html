@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Loans</title>
+
+    <style>
+        .navbar{
+
+height: 10vh;
+width: 100%;
+position: fixed;
+top: 0vh;
+z-index: 10;
+background-color: rgb(9, 97, 12);
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 2vw;
+box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.navbar h3{
+color: aliceblue;
+}
+
+.nav-options{
+display: flex;
+gap: 20px;
+}
+
+.nav-options a{
+color: rgb(209, 210, 211);
+text-decoration: none;
+cursor: pointer;
+}
+
+.nav-options a:hover{
+color: aliceblue;
+}
+
+.loans-page{
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    padding-top: 13vh;
+}
+
+.loans{
+    width: 60%;
+    height: 85vh;
+    margin-right: 5vw;
+
+    padding-left: 3vw;
+
+}
+.loans h2{
+
+    color: rgba(50, 89, 116, 0.893);
+    margin-bottom: 5vh;
+}
+
+.loans-body{
+
+    width: 100%;
+    height: 72vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.loans-body::-webkit-scrollbar {
+    display: none;
+}
+.loans-body .loan{
+
+    background-color: rgba(233, 236, 239, 0.676);
+    padding: 2vh 2vw;
+    border-radius: 1rem;
+    display: flex;
+    gap: 10px;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+
+}
+
+.loans-body .loan span{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.loans-body span p{
+
+    font-size: 0.9rem;
+    margin: 0;
+    color: rgb(30, 122, 192);
+    display: flex;
+    gap: 10px;
+}
+.loans-body span p b{
+
+    font-weight: 500;
+    color: rgb(82, 130, 151);
+}
+
+
+
+.loan-requests-container{
+
+    width: 35%;
+    height: 85vh;
+    padding-right: 2vw;
+}
+
+.loan-requests-container h3{
+
+    margin-bottom: 4vh;
+    color: rgba(40, 94, 117, 0.947);
+}
+
+.loan-requests{
+
+    width: 100%;
+    height: 72vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.loan-requests::-webkit-scrollbar {
+    display: none;
+}
+
+.loan-request{
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(238, 241, 244, 0.753);
+    padding: 2vh 2vw;
+    border-radius: 1rem;
+}
+
+.loan-request p{
+    margin: 0;
+    color: rgb(74, 136, 160);
+    display: flex;
+    gap: 10px;
+}
+
+.loan-request p b{
+    font-weight: 500;
+    color: rgb(72, 111, 126);
+}
+
+.loan-request span{
+<!--    margin-top: 15px;-->
+    display: flex;
+    gap: 30px;
+}
+
+    </style>
+
+</head>
+<body>
+
+<div class="navbar">
+    <h3 >SB Bank (Admin)</h3>
+    <div class="nav-options" >
+
+        <a href="/admin">Home</a>
+        <a href="/all-users">Users</a>
+        <a href="/all-deposits">Deposits</a>
+        <a href="/all-loans">Loans</a>
+        <a href="/all-transactions">Transactions</a>
+        <a href="#" id="logoutBtn" >Logout</a>
+    </div>
+</div>
+
+<script>
+
+    const myLink = document.getElementById('logoutBtn');
+
+    myLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+         localStorage.clear();
+        for (let key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            localStorage.removeItem(key);
+          }
+        }
+        window.location.href = '/';
+
+    });
+</script>
+
+
+<div class="loans-page">
+
+    <div class="loans">
+
+        <h2>All loans</h2>
+        <div class="loans-body">
+
+            <div >
+                <div class="loan" th:each="loan: ${loansList} " >
+                    <span>
+                        <p><b>Loan type: </b><span th:text="${loan.loanType}"></span></p>
+                        <p><b>Balance: </b> <span th:text="${loan.balance}"></span></p>
+                        <p><b>Duration: </b> <span th:text="${loan.duration}"></span> months</p>
+                    </span>
+                    <span>
+                        <p><b>Nominee name: </b><span th:text="${loan.nomineeName}"></span></p>
+                        <p><b>Total amount: </b> <span th:text="${loan.loanAmount}"></span></p>
+                        <p><b>Start Date: </b> <span th:text="${#strings.substring(loan.createdDate, 0, 10)}"></span></p>
+                    </span>
+                    <span>
+                        <p><b>Customer name: </b> <span th:text="${loan.customerName}"></span></p>
+                        <p><b>A/c id: </b><span th:text="${loan.customerId}"></span></p>
+                        <p ><b style="color: rgb(82, 130, 151)">Loan status: </b> <span th:text="${loan.loanStatus}"></span></p>
+                    </span>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="loan-requests-container">
+        <h3>Pending Applications</h3>
+        <div class="loan-requests">
+
+            <div th:each="loanRequest: ${loansList}" >
+                <form class="loan-request" th:if="${loanRequest.loanStatus == 'pending'}" method="post" >
+                    <input type="hidden" th:value="${loanRequest._id}" name="customerName">
+                    <input type="hidden" th:value="${loanRequest.customerId}" name="customerId">
+                    <p><b>Loan type: </b><span th:text="${loanRequest.loanType}"></span></p>
+                    <p><b>Customer name: </b><span th:text="${loanRequest.customerName}"></span></p>
+                    <p><b>Customer A/c id: </b><span th:text="${loanRequest.customerId}"></span></p>
+                    <p><b>Amount: </b><span th:text="${loanRequest.loanAmount}"></span></p>
+                    <p><b>Duration: </b><span th:text="${loanRequest.duration}"></span> months</p>
+                    <span>
+                         <button class="btn btn-primary approveLoanRequestBtn" type="submit">Approve</button>
+                         <button class="btn btn-danger declineLoanRequestBtn" type="submit">Decline</button>
+                     </span>
+            </form>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    const approveButtons = document.querySelectorAll('.approveLoanRequestBtn');
+    const declineButtons = document.querySelectorAll('.declineLoanRequestBtn');
+
+    approveButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+
+
+            const formData = new FormData(this.closest('form'));
+            alert("loan Approved!!");
+            fetch('/loan-repayment', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Transaction failed');
+                }
+            })
+            .then(data => {
+                // Handle the response data as needed
+            });
+        });
+    });
+
+    declineButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this.closest('form'));
+             alert("loan Declined!!");
+            fetch('/decline-loan', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error('Transaction failed');
+                }
+            })
+            .then(data => {
+                // Handle the response data as needed
+            });
+        });
+    });
+</script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

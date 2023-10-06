@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Deposits</title>
+
+    <style>
+
+        .navbar{
+
+    height: 10vh;
+    width: 100%;
+    position: fixed;
+    top: 0vh;
+    z-index: 10;
+    background-color: rgb(9, 97, 12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2vw;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.navbar h3{
+    color: aliceblue;
+}
+
+.nav-options{
+    display: flex;
+    gap: 20px;
+}
+
+.nav-options a{
+    color: rgb(209, 210, 211);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-options a:hover{
+    color: aliceblue;
+}
+
+
+        .deposits{
+            width: 100%;
+            height: 100vh;
+            margin-right: 20%;
+            padding-top: 13vh;
+            padding-left: 3vw;
+
+        }
+        .deposits h2{
+
+            color: rgba(50, 89, 116, 0.893);
+            margin-bottom: 5vh;
+        }
+
+        .deposits-body{
+
+            width: 80%;
+            height: 72vh;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .deposits-body::-webkit-scrollbar {
+            display: none;
+        }
+        .deposits-body .deposit{
+
+            background-color: rgba(233, 236, 239, 0.676);
+            padding: 2vh 2vw;
+            border-radius: 1rem;
+            display: flex;
+            gap: 10px;
+            justify-content: space-evenly;
+
+        }
+
+        .deposits-body .deposit span{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 5px;
+        }
+
+        .deposits-body span p{
+
+            font-size: 0.9rem;
+            margin: 0;
+            color: rgb(30, 122, 192);
+            display: flex;
+            gap: 10px;
+        }
+        .deposits-body span p b{
+
+            font-weight: 500;
+            color: rgb(82, 130, 151);
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="navbar">
+    <h3 >SB Bank (Admin)</h3>
+    <div class="nav-options" >
+
+        <a href="/admin">Home</a>
+        <a href="/all-users">Users</a>
+        <a href="/all-deposits">Deposits</a>
+        <a href="/all-loans">Loans</a>
+        <a href="/all-transactions">Transactions</a>
+        <a href="#" id="logoutBtn" >Logout</a>
+    </div>
+</div>
+
+<script>
+
+    const myLink = document.getElementById('logoutBtn');
+
+    myLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+         localStorage.clear();
+        for (let key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            localStorage.removeItem(key);
+          }
+        }
+        window.location.href = '/';
+
+    });
+</script>
+
+
+<div class="deposits">
+
+    <h2>All Deposits</h2>
+    <div class="deposits-body">
+
+        <div class="deposit" th:each="deposit: ${depositsList}" >
+            <span>
+                <p><b>Deposit name: </b><span th:text="${deposit.depositName}"></span></p>
+                <p><b>Amount: </b><span th:text="${deposit.amount}"></span></p>
+                <p><b>Duration: </b><span th:text="${deposit.duration}"></span> months</p>
+
+
+            </span>
+            <span>
+                <p><b>Nominee name: </b><span th:text="${deposit.nomineeName}"></span></p>
+                <p><b>Customer name: </b> <span th:text="${deposit.customerName}"></span></p>
+                <p><b>Start Date: </b> <span th:text="${#strings.substring(deposit.createdDate, 0, 10)}"></span></p>
+            </span>
+            <span>
+                <p><b>Nominee age: </b> <span th:text="${deposit.nomineeAge}"></span></p>
+                <p><b>Customer A/c id: </b><span th:text="${deposit.customerId}"></span></p>
+                <p><b>Mature Date: </b><span th:text="${deposit.matureDate}"></span></p>
+            </span>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

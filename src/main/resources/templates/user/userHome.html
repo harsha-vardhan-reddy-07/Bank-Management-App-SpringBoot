@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>User</title>
+
+    <style>
+        .navbar{
+
+    height: 10vh;
+    width: 100%;
+    position: fixed;
+    top: 0vh;
+    z-index: 10;
+    background-color: rgb(9, 97, 12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2vw;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.navbar h3{
+    color: aliceblue;
+}
+
+.nav-options{
+    display: flex;
+    gap: 20px;
+}
+
+.nav-options a{
+    color: rgb(209, 210, 211);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-options a:hover{
+    color: aliceblue;
+}
+ .home-page{
+    width: 100%;
+    height: fit-content;
+    padding: 13vh 0 5vh 0;
+}
+
+
+.home-body{
+
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    margin-top: 2vh;
+
+}
+
+.home-container1{
+    width: 100%;
+    display: flex;
+
+}
+
+.balance-container{
+
+    width: 40%;
+    margin-left: 5%;
+    height: fit-content;
+    background-color: rgba(211, 239, 229, 0.527);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    padding: 4vh 2vw;
+    border-radius: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+}
+
+.balance-container:hover{
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+.balance-container h4{
+
+    color: rgb(78, 113, 135);
+    margin: 0;
+    font-size: 1.3rem;
+}
+.balance-container h5{
+
+    color: rgb(78, 113, 135);
+    margin: 0;
+}
+.balance-container p{
+
+    color: rgb(20, 161, 74);
+    font-size: 1.1rem;
+    margin: 0;
+    display: flex;
+}
+.balance-container span{
+
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.send-money-container{
+
+    width: 40%;
+    margin-left: 5%;
+    background-color: rgba(211, 239, 229, 0.527);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 1.3rem;
+
+}
+.send-money-container form{
+    padding: 3vh 2vw;
+}
+
+.send-money-container form h4{
+    text-align: center;
+    color: rgb(70, 114, 145);
+}
+.send-money-container form input{
+    background-color: rgba(255, 255, 255, 0.79);
+}
+.send-money-container form label{
+    color: rgb(27, 64, 92);
+}
+.send-money-container form button{
+    width: 30%;
+    margin-left: 35%;
+}
+
+
+    </style>
+
+
+
+</head>
+<body>
+
+
+
+
+
+
+<div class="navbar">
+    <h3>SB Bank</h3>
+    <div class="nav-options">
+        <a id="navUser" href="/user">Home</a>
+        <a id="navDeposit" href="/user-deposits">Deposits</a>
+        <a id="navLoan" href="/user-loan">Loans</a>
+        <a id="navTransaction" href="/user-transactions">Transactions</a>
+        <a href="#" id="logoutBtn" >Logout</a>
+    </div>
+</div>
+
+<script>
+    const uData = JSON.parse(localStorage.getItem('userData'));
+
+    if (uData) {
+
+        const userLink = document.getElementById('navUser');
+        userLink.href = `/user/${uData._id}`;
+
+        const depositLink = document.getElementById('navDeposit');
+        depositLink.href = `/user-deposits/${uData._id}`;
+
+        const loansLink = document.getElementById('navLoan');
+        loansLink.href = `/user-loan/${uData._id}`;
+
+        const transactionsLink = document.getElementById('navTransaction');
+        transactionsLink.href = `/user-transactions/${uData._id}`;
+
+    }
+</script>
+
+
+<script>
+
+    const myLink = document.getElementById('logoutBtn');
+
+    myLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+         localStorage.clear();
+        for (let key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            localStorage.removeItem(key);
+          }
+        }
+        window.location.href = '/';
+
+    });
+</script>
+
+
+
+
+
+
+
+
+<div class="home-page">
+
+    <div class="home-body">
+        <div class="home-container1">
+
+            <div class="balance-container">
+                <span>
+                    <h4>Account balance</h4>
+<!--                    <p>&#8377; <span id="homeBalance"></span></p>-->
+                    <p>&#8377; <span th:text="${userBalance}" ></span></p>
+                </span>
+                <span>
+                    <h5>User</h5>
+                    <p><span id="homeUsername"></span></p>
+                </span>
+                <span>
+                    <h5>Account Id</h5>
+                    <p><span id="homeACID"></span></p>
+                </span>
+                <span>
+                    <h5>Home Branch</h5>
+                    <p><span id="homeBranch"></span></p>
+                </span>
+                <span>
+                    <h5>IFSC Code</h5>
+                    <p><span id="homeIFSC"></span></p>
+                </span>
+
+
+            </div>
+
+
+
+
+            <div class="send-money-container">
+
+                <form id="sendMoneyForm" action="/send-money" method="post" >
+                    <h4>Send money</h4>
+
+                    <input type="hidden" class="form-control" id="senderId" placeholder="Enter account id"  name="senderId" >
+                    <input type="hidden" class="form-control" id="senderName" placeholder="Enter account id"  name="senderName" >
+
+                    <div class="mb-3">
+                        <label for="receiverId" class="form-label">Receiver's a/c id</label>
+                        <input type="text" class="form-control" id="receiverId" placeholder="Enter account id"  name="receiverId">
+                    </div>
+                    <div class="mb-3">
+                        <label for="receiverIFSC" class="form-label">Receiver's IFSC</label>
+                        <input type="text" class="form-control" id="receiverIFSC" placeholder="Enter IFSC"  name="receiverIFSC">
+                    </div>
+                    <div class="mb-3">
+                        <label for="sendAmount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="sendAmount" placeholder="Enter amount" name="amount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="paymentMethod" class="form-label">Payment method</label>
+                        <select class="form-select" id="paymentMethod" aria-label="Default select example" name="paymentMethod" >
+                            <option value="">Choose payment method</option>
+                            <option value="IMPS">IMPS</option>
+                            <option value="RTGS">RTGS</option>
+                            <option value="NEFT">NEFT</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="remarks" class="form-label">Remarks</label>
+                        <input type="text" class="form-control" id="remarks" placeholder="Remarks"  name="remarks">
+                    </div>
+                    <button type="submit" class="btn btn-primary" >Send</button>
+                </form>
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('sendMoneyForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/send-money', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+
+                var data = response.json();
+
+                return data;
+            } else {
+                console.error('transaction failed');
+            }
+        })
+        .then(sender => {
+
+            var localStorageData = JSON.parse(localStorage.getItem('userData'));
+
+            const senderData = JSON.parse(JSON.stringify(sender));
+
+            localStorageData.balance = senderData.balance;
+
+            localStorage.setItem('userData', JSON.stringify(localStorageData))
+
+            alert("Payment successful");
+
+            window.location.href = '/user/${senderData._id}';
+
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+
+
+<div id="userDataContainer"></div>
+
+<script>
+
+    var data = localStorage.getItem('userData');
+    var userData = JSON.parse(data);
+
+    const homeUsername = document.getElementById('homeUsername');
+    const homeACID = document.getElementById('homeACID');
+    const homeIFSC = document.getElementById('homeIFSC');
+    const homeBranch = document.getElementById('homeBranch');
+
+    const homeBalance = document.getElementById('homeBalance');
+
+    const senderId = document.getElementById('senderId');
+    const senderName = document.getElementById('senderName');
+
+
+    homeUsername.textContent = userData.username;
+    homeACID.textContent = userData._id;
+    homeIFSC.textContent = userData.IFSCCode;
+    homeBranch.textContent = userData.homeBranch;
+    homeBalance.textContent = userData.balance;
+
+    senderId.value = userData._id;
+    senderName.value = userData.username
+
+</script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

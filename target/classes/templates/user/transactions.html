@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Transactions</title>
+
+    <style>
+        .navbar{
+
+height: 10vh;
+width: 100%;
+position: fixed;
+top: 0vh;
+z-index: 10;
+background-color: rgb(9, 97, 12);
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 2vw;
+box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.navbar h3{
+color: aliceblue;
+}
+
+.nav-options{
+display: flex;
+gap: 20px;
+}
+
+.nav-options a{
+color: rgb(209, 210, 211);
+text-decoration: none;
+cursor: pointer;
+}
+
+.nav-options a:hover{
+color: aliceblue;
+}
+.all-transactions-page{
+    width: 100%;
+    height: 100vh;
+    padding-top: 13vh;
+    padding-left: 3vw
+}
+.all-transactions-page h2{
+    margin-bottom: 4vh;
+    color: rgba(77, 109, 134, 0.934);
+}
+
+.transactions-body{
+    width: 70%;
+    height: 85%;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+.transactions-body::-webkit-scrollbar {
+    display: none;
+}
+
+.transaction{
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(239, 245, 245, 0.477);
+    border: 1px solid #97a0b334;
+    padding: 1.5vh 2vw;
+    border-radius: 0.8rem;
+}
+
+.transaction span{
+    display: flex;
+    justify-content: space-between;
+}
+
+.transaction span p{
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgb(25, 74, 107);
+    display: flex;
+    gap: 10px;
+}
+.transaction span p b{
+    font-weight: 600;
+    color: rgb(108, 133, 149);
+}
+
+
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h3>SB Bank</h3>
+    <div class="nav-options">
+        <a id="navUser" href="/user">Home</a>
+        <a id="navDeposit" href="/user-deposits">Deposits</a>
+        <a id="navLoan" href="/user-loan">Loans</a>
+        <a id="navTransaction" href="/user-transactions">Transactions</a>
+        <a href="#" id="logoutBtn" >Logout</a>
+    </div>
+</div>
+
+<script>
+    const uData = JSON.parse(localStorage.getItem('userData'));
+
+    if (uData) {
+
+        const userLink = document.getElementById('navUser');
+        userLink.href = `/user/${uData._id}`;
+
+        const depositLink = document.getElementById('navDeposit');
+        depositLink.href = `/user-deposits/${uData._id}`;
+
+        const loansLink = document.getElementById('navLoan');
+        loansLink.href = `/user-loan/${uData._id}`;
+
+        const transactionsLink = document.getElementById('navTransaction');
+        transactionsLink.href = `/user-transactions/${uData._id}`;
+
+    }
+</script>
+
+<script>
+
+    const myLink = document.getElementById('logoutBtn');
+
+    myLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+         localStorage.clear();
+        for (let key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            localStorage.removeItem(key);
+          }
+        }
+
+        window.location.href = '/';
+
+
+    });
+
+</script>
+
+
+<div class="all-transactions-page">
+
+    <h2>All Transactions</h2>
+
+    <div class="transactions-body">
+
+        <div th:each="transaction: ${transactionsList}" >
+
+            <div class="transaction"  >
+                <span>
+                    <p><b>Amount: </b><span th:text="${transaction.amount}" ></span> </p>
+                    <p><b>Receiver: </b><span th:text="${transaction.receiverName}" ></span>  </p>
+                    <p><b>Receiver's a/c id: </b><span th:text="${transaction.receiverId}" ></span>  </p>
+                </span>
+                <span>
+                    <p><b>Sender: </b><span th:text="${transaction.senderName}" ></span>  </p>
+                    <p><b>Sender's a/c id: </b><span th:text="${transaction.senderId}" ></span>  </p>
+                    <p><b>Time: </b><span th:text="${transaction.time}" ></span>  </p>
+                </span>
+            </div>
+
+<!--            <div class="transaction" >-->
+<!--                <span>-->
+<!--                    <p><b>Amount:</b> amount </p>-->
+<!--                    <p><b>Loan:</b> loan </p>-->
+<!--                </span>-->
+<!--                <span>-->
+<!--                    <p><b>Sender's a/c id:</b> {{transaction.senderId}} </p>-->
+<!--                    <p><b>Time:</b> transactiontime </p>-->
+<!--                </span>-->
+<!--            </div>-->
+
+<!--            <div class="transaction" >-->
+<!--                <span>-->
+<!--                    <p><b>Amount:</b> amount </p>-->
+<!--                    <p><b>Deposit name:</b> deposit </p>-->
+<!--                </span>-->
+<!--                <span>-->
+<!--                    <p><b>Sender's a/c id:</b> transaction.senderId </p>-->
+<!--                    <p><b>Time:</b> transaction.time </p>-->
+<!--                </span>-->
+<!--            </div>-->
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
